@@ -10,9 +10,11 @@ const char* mqtt_server = "192.168.1.10";
 // const char* mqtt_server = "broker.mqtt-dashboard.com";
 const int mqtt_port = 1883;
 
+
 std::vector<String> msgList;
 bool inchat = false;
 
+// On message received
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
@@ -37,21 +39,21 @@ void loop() {
   mainmenu.run();
 }
 
-
-void reconnect() {
-  // Loop until we're reconnected
-  while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...");
-
-    String clientId = getMacAddr();
-    if (client.connect(clientId.c_str())) {
-      Serial.println("connected");
-      // Once connected, publish an announcement...
-      //client.publish("outTopic", "hello world");
-      client.subscribe("chat");
+bool keepMqttConn() {
+    if (!client.connected()) {
+        Serial.print("Attempting MQTT connection...");
+        String clientId = getMacAddr();
+        if (client.connect(clientId.c_str())) {
+          Serial.print("Connecting done");
+          // Once connected, publish an announcement...
+          //client.publish("outTopic", "hello world");
+          client.subscribe("chat");
+          return true;
+        } else {
+          return false;
+        }
     }
-    delay(1000); 
-  }
+    return true;
 }
 
 
@@ -85,8 +87,9 @@ void chat_menu() {
   redraw();
   
   while(true) {
-    if (!client.connected()) {
-      reconnect();
+    if(!keepMqttConn()) {
+      ez.msgBox("notice", "MQTT server not found.");
+      return;
     }
     client.loop();
     
@@ -102,6 +105,7 @@ void chat_menu() {
       
       if(msg.length() > 0) {
         //msgList.push_back(msg);
+        keepMqttConn();
         client.publish("chat", msg.c_str());
       }
       redraw();
