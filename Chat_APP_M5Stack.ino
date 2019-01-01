@@ -7,6 +7,8 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 const char* mqtt_server = "192.168.1.10";
+// const char* mqtt_server = "broker.mqtt-dashboard.com";
+const int mqtt_port = 1883;
 
 std::vector<String> msgList;
 bool inchat = false;
@@ -24,7 +26,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 void setup() {
   ez.begin();
-  client.setServer(mqtt_server, 1883);
+  client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
 }
 
@@ -74,6 +76,10 @@ void redraw() {
 }
 
 void chat_menu() {
+  if(WiFi.status() != WL_CONNECTED) {
+    ez.msgBox("notice", "Wi-Fi is not enabled. Please setting Wi-Fi.");
+    return;
+  }
   inchat = true;
   ez.buttons.show("up # Back # input # # down #");
   redraw();
