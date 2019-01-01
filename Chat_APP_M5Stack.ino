@@ -14,7 +14,7 @@ const int mqtt_port = 1883;
 std::vector<String> msgList;
 bool inchat = false;
 
-// On message received
+// on message received
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
@@ -39,10 +39,12 @@ void loop() {
   mainmenu.run();
 }
 
+// true: connected,  false: not connected
 bool keepMqttConn() {
     if (!client.connected()) {
         Serial.print("Attempting MQTT connection...");
-        String clientId = getMacAddr();
+
+        String clientId = getMacAddr(); 
         if (client.connect(clientId.c_str())) {
           Serial.print("Connecting done");
           // Once connected, publish an announcement...
@@ -56,7 +58,7 @@ bool keepMqttConn() {
     return true;
 }
 
-
+// draw chat messages on LCD
 void redraw() {
   if(!inchat) {
     return;
@@ -66,7 +68,7 @@ void redraw() {
   ez.canvas.font(&FreeSans9pt7b);
   ez.canvas.lmargin(10);
 
-  // show 8 messages
+  // show latest 8 messages
   int total = 0;
   for(int i = msgList.size() - 1 ; i >= 0; i--) {
     if(total >= 8) {
@@ -77,12 +79,14 @@ void redraw() {
   }
 }
 
+// chat main
 void chat_menu() {
   if(WiFi.status() != WL_CONNECTED) {
     ez.msgBox("notice", "Wi-Fi is not enabled. Please setting Wi-Fi.");
     return;
   }
   inchat = true;
+  
   ez.buttons.show("up # Back # input # # down #");
   redraw();
   
@@ -93,7 +97,7 @@ void chat_menu() {
     }
     client.loop();
     
-    String btnpressed = ez.buttons.poll();
+    String btnpressed = ez.buttons.poll(); // check button status
     if(btnpressed == "Back") {
       break;
     }else if(btnpressed == "input") {
@@ -102,12 +106,14 @@ void chat_menu() {
       
       String msg = ez.textInput();
       msg.trim();
-      
+
+      // send message
       if(msg.length() > 0) {
         //msgList.push_back(msg);
         keepMqttConn();
         client.publish("chat", msg.c_str());
       }
+      
       redraw();
       ez.buttons.clear(true);
       ez.buttons.show("up # Back # input # # down #");
@@ -118,6 +124,7 @@ void chat_menu() {
   inchat = false;
 }
 
+// get MAC address of device
 String getMacAddr() {
   uint8_t baseMac[6];
   esp_read_mac(baseMac, ESP_MAC_WIFI_STA);
