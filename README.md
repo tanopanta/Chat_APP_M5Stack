@@ -2,11 +2,13 @@
 
 Coming soon....................
 
+Note:V1.2 is a insider preview and it will not publish.
+
 # Chat_APP_M5Stack
 
 Prototype chat application using MQTT with M5Stack (Faces)
 
-includes a server
+includes a server:test.mosquitto.org
 
 using library: pubsubclient,m5ez
 
