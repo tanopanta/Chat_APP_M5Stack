@@ -1,26 +1,21 @@
-//#include <MqttClient.h>
+// includes
 #include <M5Stack.h>
 #include <SPIFFS.h>
 #include <M5ez.h>
 #include <vector>
 #include "images.h"
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////#include "sysinfo.h"
 #include <PubSubClient.h>
 
-//#include "default.h"
-//#include "dark.h"
-
+// names
 WiFiClient espClient;
 PubSubClient client(espClient);
-
-
-
+// username
+const char* user_name = "M5FIRE";  // will set your username
+// config 
 const char* mqtt_server = "test.mosquitto.org";
-//const char* mqtt_server = "postman.cloudmqtt.com";
-//const int mqtt_port = 18281;
 const int mqtt_port = 1883;
 
-
+// codes
 std::vector<String> msgList;
 bool inchat = false;
 
@@ -30,6 +25,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print(topic);
   Serial.print("] ");
   payload[length] = '\0';
+  Serial.println("getcode:");
+  Serial.println("200");
   String msg = String((char*) payload);
   Serial.println(msg);
   msgList.push_back(msg);
@@ -41,15 +38,32 @@ void callback(char* topic, byte* payload, unsigned int length) {
 void setup() {
   Serial.begin(115200);
   // Serial.begin(921600);
+  Serial.println("STARTING BOARD..............................................................................");  
+  Serial.println("M5STACK V1.3 ESP-IDF V3.2 BOOTLOADER V0.01 SOFTWARE cannot get");  
+  Serial.println("starting console.............................................................................................................................overwrite!");
+  Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print("loading...login...logged on");  
+  Serial.println("started...........serial 115200 console");
+  Serial.println("boot item is bootloader at 0x1000----------------------------------------------------------------------------------------------booting---success.");
+  Serial.println("enter system...");
+  Serial.println("doing check......OK");
+  Serial.println("enter system.");
+  Serial.println("mounted.bin");
+  Serial.println("setting contrast...- 23 -");
+  Serial.print("DONE- 10 -");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");
+//  #include <themes/default.h>
+//  #include <themes/dark.h>
+//  #include <themes/deep.h>
+  #include "default.h"
+  #include "dark.h"
+  #include "deep.h"
   ez.begin();
   SPIFFS.begin();
-  //setPowerBoostKeepOn(false);
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
 }
 
 void loop() {
-  ezMenu mainmenu("Welcome to M5ez");
+  ezMenu mainmenu("Welcome to M5ez ");
   mainmenu.addItem("chat", chat_menu);
   mainmenu.addItem("option", mainmenu_image);
   mainmenu.addItem("settings", ez.settings.menu);
@@ -97,7 +111,7 @@ void redraw() {
   ez.header.show("chat");
   ez.canvas.font(&FreeSans9pt7b);
   ez.canvas.lmargin(10);
-
+  Serial.println("INPAGE  chat");
   // show latest 8 messages
   int total = 0;
   for(int i = msgList.size() - 1 ; i >= 0; i--) {
@@ -113,6 +127,7 @@ void redraw() {
 void chat_menu() {
   if(WiFi.status() != WL_CONNECTED) {
     ez.msgBox("notice", "Wi-Fi is not enabled. Please setting Wi-Fi.");
+    Serial.println("menuloaded");
     return;
   }
   inchat = true;
@@ -122,7 +137,9 @@ void chat_menu() {
   
   while(true) {
     if(!keepMqttConn()) {
+      Serial.println("ERROR.code:");
       ez.msgBox("notice", "MQTT server not found.");
+      Serial.println("404");
       return;
     }
     client.loop();
@@ -141,7 +158,8 @@ void chat_menu() {
       if(msg.length() > 0) {
         //msgList.push_back(msg);
         keepMqttConn();
-        client.publish("chat", msg.c_str());
+        //client.publish("chat", user_name);
+        client.publish("chat", user_name, msg.c_str());
       }
       
       redraw();
@@ -209,15 +227,15 @@ void sysInfoPage2() {
 void mainmenu_ota() {
   if (ez.msgBox("Get latest bin", "update chat with internet now!", "Cancel#OK#") == "OK") {
     ezProgressBar progress_bar("OTA update in progress", "Downloading ...", "Abort");
-    #include "rootcert.h" // the root certificate is now in const char * root_cert
-    if (ez.wifi.update("https://github.com/sysdl132/Chat_APP_M5Stack/releases/download/v1.0/Chat_APP_M5Stack.ino.bin", root_cert, &progress_bar)) {
+    #include "rootcert.h"; // the root certificate is now in const char * root_cert
+    ;if (ez.wifi.update("https://gitee.com/sysdl132/Chat_APP_M5Stack/raw/master/1.bin", root_cert, &progress_bar)) {
       ez.msgBox("Over The Air updater", "OTA download successful. Reboot to new firmware", "Reboot");
       ESP.restart();
     } else {
       ez.msgBox("OTA error", ez.wifi.updateError(), "OK");
     }
   }
-}
+};
 
 void powerOff() { m5.powerOFF(); }
 
