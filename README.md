@@ -37,3 +37,13 @@ v1.0.0 -- first version
 
 v0.5.0 -- inside build beta
 
+## Monitor
+Downloads:  ![](https://img.shields.io/github/downloads/sysdl132/Chat_APP_M5Stack/total?style=for-the-badge)
+
+Size:  ![](https://img.shields.io/github/repo-size/sysdl132/Chat_APP_M5Stack?style=for-the-badge)
+
+Open/close issues: ![](https://img.shields.io/github/issues-raw/sysdl132/Chat_APP_M5Stack?style=for-the-badge)  ![](https://img.shields.io/github/issues-closed-raw/sysdl132/chat_app_m5stack?style=for-the-badge)
+
+License:  ![](https://img.shields.io/github/license/sysdl132/chat_app_m5stack)
+
+Change since latest version/(include alpha builds):  ![](https://img.shields.io/github/commits-since/sysdl132/chat_app_m5stack/latest/master)   ![](https://img.shields.io/github/commits-since/sysdl132/chat_app_m5stack/latest/master?include_prereleases&style=for-the-badge)
