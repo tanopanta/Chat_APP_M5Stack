@@ -10,7 +10,7 @@
 WiFiClient espClient;
 PubSubClient client(espClient);
 // username
-const char* user_name = "M5FIRE";  // will set your username
+//const char* user_name = "M5FIRE";  // will set your username,disabled now
 // config 
 const char* mqtt_server = "test.mosquitto.org";
 const int mqtt_port = 1883;
@@ -159,7 +159,7 @@ void chat_menu() {
         //msgList.push_back(msg);
         keepMqttConn();
         //client.publish("chat", user_name);
-        client.publish("chat", user_name, msg.c_str());
+        client.publish("chat", msg.c_str());
       }
       
       redraw();
