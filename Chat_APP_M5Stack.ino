@@ -39,19 +39,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 void setup() {
   Serial.begin(115200);
-  // Serial.begin(921600);
-  Serial.println("STARTING BOARD..............................................................................");  
-  Serial.println("M5STACK V1.3 ESP-IDF V3.2 BOOTLOADER V0.01 SOFTWARE cannot get");  
-  Serial.println("starting console.............................................................................................................................overwrite!");
-  Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print("loading...login...logged on");  
-  Serial.println("started...........serial 115200 console");
-  Serial.println("boot item is bootloader at 0x1000----------------------------------------------------------------------------------------------booting---success.");
-  Serial.println("enter system...");
-  Serial.println("doing check......OK");
-  Serial.println("enter system.");
-  Serial.println("mounted.bin");
-  Serial.println("setting contrast...- 23 -");
-  Serial.print("DONE- 10 -");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");Serial.print(".");
   #include <themes/default.h>
   #include <themes/dark.h>
   // #include <themes/deep.h> //note:This is my customsize theme.If you have,uncomment this line.If you want,you can make an issue and I will post it.
